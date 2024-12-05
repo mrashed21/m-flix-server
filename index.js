@@ -8,10 +8,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.cjfhp.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
-
-console.log(process.env.DB_USER, process.env.DB_PASS);
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
   serverApi: {
@@ -44,6 +41,13 @@ async function run() {
     app.post("/movie", async (req, res) => {
       const movie = req.body;
       const result = await movieCollection.insertOne(movie);
+      res.send(result);
+    });
+
+    app.delete("/movie/details/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await movieCollection.deleteOne(query);
       res.send(result);
     });
 
