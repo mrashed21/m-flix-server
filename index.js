@@ -50,8 +50,27 @@ async function run() {
       const result = await movieCollection.deleteOne(query);
       res.send(result);
     });
+    app.put ("/movie/update/:id", async (req, res) => {
+      const id = req.params.id;
+      const updatedMovie = req.body;
+      const filter = { _id: new ObjectId(id) };
+      const updateDoc = {
+        $set: {
+          duration: updatedMovie.duration,
+          genre: updatedMovie.genre,
+          poster: updatedMovie.poster,
+          rating: updatedMovie.rating,
+          releaseYear: updatedMovie.releaseYear,
+          summary: updatedMovie.summary,
+          title: updatedMovie.title,
 
-    
+        },
+      };
+
+      const result = await movieCollection.updateOne(filter, updateDoc);
+      res.send(result);
+    });
+
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log(
