@@ -38,6 +38,16 @@ async function run() {
       const result = await movieCollection.findOne(query);
       res.send(result);
     });
+
+    app.get("/movie/featured", async (req, res) => {
+      const featuredMovies = await movieCollection
+        .find({})
+        .sort({ rating: -1 })
+        .limit(6)
+        .toArray();
+      res.send(featuredMovies);
+    });
+
     app.post("/movie", async (req, res) => {
       const movie = req.body;
       const result = await movieCollection.insertOne(movie);
@@ -50,7 +60,8 @@ async function run() {
       const result = await movieCollection.deleteOne(query);
       res.send(result);
     });
-    app.put ("/movie/update/:id", async (req, res) => {
+
+    app.put("/movie/update/:id", async (req, res) => {
       const id = req.params.id;
       const updatedMovie = req.body;
       const filter = { _id: new ObjectId(id) };
@@ -63,7 +74,6 @@ async function run() {
           releaseYear: updatedMovie.releaseYear,
           summary: updatedMovie.summary,
           title: updatedMovie.title,
-
         },
       };
 
