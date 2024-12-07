@@ -21,7 +21,7 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
-    await client.connect();
+    // await client.connect();
 
     const database = client.db("movieDB");
     const movieCollection = database.collection("movie");
@@ -32,6 +32,15 @@ async function run() {
       res.send(result);
     });
 
+    // recently added movie
+    app.get("/movie/recent", async (req, res) => {
+      const recentMovies = await movieCollection
+        .find({})
+        .sort({ addedAt: -1 })
+        .limit(5)
+        .toArray();
+      res.send(recentMovies);
+    });
     app.get("/movie/details/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
