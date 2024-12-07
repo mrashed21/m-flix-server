@@ -81,6 +81,41 @@ async function run() {
       res.send(result);
     });
 
+    // add movie in favorite list
+    const favoriteCollection = database.collection("favorites");
+
+    app.post("/movie/favorites/:email", async (req, res) => {
+      const { email } = req.params;
+      const favorite = req.body;
+      const exists = await favoriteCollection.findOne({
+        email,
+        movieId: favorite.movieId,
+      });
+
+      if (exists) {
+        res.send({ exists: true });
+        return;
+      }
+      const result = await favoriteCollection.insertOne(favorite);
+      res.send(result);
+    });
+
+    app.delete("/movie/favorites/:email/:movieId", async (req, res) => {
+      const { email, movieId } = req.params;
+      const result = await favoriteCollection.deleteOne({
+        email,
+        movieId,
+      });
+
+      res.send(result);
+    });
+
+    app.get("/movie/favorites/:email", async (req, res) => {
+      const { email } = req.params;
+      const favorites = await favoriteCollection.find({ email }).toArray();
+      res.send(favorites || []);
+    });
+
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log(
