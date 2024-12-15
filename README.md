@@ -2,6 +2,9 @@
 
 This is a Node.js-based API for managing movies in a MongoDB database. It supports basic CRUD operations for movies, including adding, updating, deleting, and retrieving movies. The API also includes functionality for managing a user's favorite movies.
 
+## Live Site
+You can view the live application here: [Movie Portal Client Site](https://m-flix.netlify.app/)
+
 ## Features
 
 - **GET /movie/all**: Retrieve all movies from the database.
