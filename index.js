@@ -52,7 +52,7 @@ async function run() {
       const featuredMovies = await movieCollection
         .find({})
         .sort({ rating: -1 })
-        .limit(6)
+        .limit(8)
         .toArray();
       res.send(featuredMovies);
     });
